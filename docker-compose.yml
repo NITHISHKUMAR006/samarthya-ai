@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: samarthya-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-samarthya_db}
+      MYSQL_USER: ${MYSQL_USER:-samarthya_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-samarthya_pass}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: samarthya-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-samarthya_user}:${MYSQL_PASSWORD:-samarthya_pass}@mysql:3306/${MYSQL_DATABASE:-samarthya_db}
+      JWT_SECRET: ${JWT_SECRET:-samarthya-secret-key-change-in-production-2026}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:3000,http://frontend:5173"
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: samarthya-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:8000/api
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  backend_uploads:

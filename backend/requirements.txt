@@ -1,0 +1,12 @@
+fastapi>=0.115.0
+uvicorn>=0.30.0
+sqlalchemy>=2.0.30
+pymysql>=1.1.0
+cryptography>=42.0.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.9
+pydantic>=2.9.0
+python-dotenv>=1.0.0
+PyPDF2>=3.0.0
+python-pptx>=0.6.23
