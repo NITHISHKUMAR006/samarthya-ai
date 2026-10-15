@@ -1,9 +1,27 @@
-<<<<<<< HEAD
-# SAMARTHYA AI — AI-Powered Personalized Learning Platform
+# SAMARTHYA AI — Adaptive Intelligence & Capacity Building Platform
 
 **Smart India Hackathon 2026**
 
-SAMARTHYA AI is a competency-based learning platform for government officials in India's Official Statistical System. It identifies competency gaps, recommends personalized learning from the iGOT Karmayogi catalogue, and generates quizzes from uploaded learning materials using an AI-ready RAG + LLM architecture.
+SAMARTHYA AI is a competency-based learning platform for government officials in India's Official Statistical System (MoSPI). It identifies competency gaps, recommends personalized learning from the iGOT Karmayogi catalogue, and generates quizzes from uploaded learning materials using an AI-ready RAG + LLM architecture.
+
+---
+
+## 🚀 Live Demo & Deployment
+
+| Resource | Link |
+|---|---|
+| **🌐 Live Web Application** | **[https://samarthya.nithishkps.workers.dev/](https://samarthya.nithishkps.workers.dev/)** |
+| **💻 GitHub Repository** | **[https://github.com/NITHISHKUMAR006/samarthya-ai](https://github.com/NITHISHKUMAR006/samarthya-ai)** |
+| **⚡ Status** | Active • Cloudflare Workers + Supabase Backend |
+
+### 🔑 Demo Login Credentials
+
+The live deployment supports **1-Click Demo Login** directly from the login page, or you can enter these credentials manually:
+
+| Role | Email | Password | Access Level |
+|---|---|---|---|
+| **Official (Statistical Officer)** | `rajesh.kumar@samarthya.demo` | `official123` | Dashboard, Competency Radar, iGOT Recommendations, Quiz, AI Assistant & Certificates |
+| **System Administrator** | `admin@samarthya.demo` | `admin123` | Governance Panel, Officials Directory, Competency Taxonomy, System Analytics |
 
 ---
 
@@ -15,7 +33,7 @@ SAMARTHYA AI is a competency-based learning platform for government officials in
 | Charts         | Recharts                                  |
 | Icons          | Lucide React                              |
 | Backend        | Python 3.11 + FastAPI + SQLAlchemy        |
-| Database       | MySQL 8.0                                 |
+| Database       | Supabase (PostgreSQL)                     |
 | Authentication | JWT + bcrypt + RBAC                       |
 | AI Architecture| RAG + LLM-ready (mock for demo)           |
 | Deployment     | Docker + docker-compose                   |
@@ -28,39 +46,38 @@ SAMARTHYA AI is a competency-based learning platform for government officials in
 
 - **Node.js** 18+ and **npm**
 - **Python** 3.10+
-- **MySQL** 8.0 (or Docker)
+- **Supabase** account or PostgreSQL instance
 - **Docker** (optional, for containerized setup)
 
 ### Option 1: Docker (Recommended)
 
 ```bash
 # Clone and navigate
+git clone https://github.com/NITHISHKUMAR006/samarthya-ai.git
 cd samarthya-ai
 
-# Copy environment file
-cp .env.example .env
+# Copy environment configuration file
+cp config.env.example config.env
 
-# Start all services
+# Start the application (Frontend + Backend):
 docker-compose up --build
 
-# In another terminal, seed the database
+# In another terminal, seed the database (if needed)
 docker exec samarthya-backend python seed_data.py
 ```
 
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8000
-- API Docs (Swagger): http://localhost:8000/docs
+- **🌐 Live Demo:** [https://samarthya.nithishkps.workers.dev/](https://samarthya.nithishkps.workers.dev/)
+- Local Frontend: http://localhost:8005
+- Backend API: http://localhost:5173
+- API Docs (Swagger): http://localhost:5173/docs
 
 ### Option 2: Manual Setup
 
-#### 1. MySQL Database
+#### 1. Supabase Database Setup
 
-```bash
-# Create the database
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS samarthya_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root -p -e "CREATE USER IF NOT EXISTS 'samarthya_user'@'localhost' IDENTIFIED BY 'samarthya_pass';"
-mysql -u root -p -e "GRANT ALL PRIVILEGES ON samarthya_db.* TO 'samarthya_user'@'localhost'; FLUSH PRIVILEGES;"
-```
+1. Create a project at [supabase.com](https://supabase.com).
+2. Note your **Project URL** and **Database Password**.
+3. *(Optional)* Run `database/supabase_schema.sql` in the Supabase **SQL Editor**, or let the backend auto-create tables on startup via SQLAlchemy.
 
 #### 2. Backend
 
@@ -75,14 +92,17 @@ venv\Scripts\activate        # Windows
 # Install dependencies
 pip install -r requirements.txt
 
-# Set environment variables (or create .env file in backend/)
-# DATABASE_URL=mysql+pymysql://samarthya_user:samarthya_pass@localhost:3306/samarthya_db
+# Copy and configure config.env
+cp config.env.example config.env
+# Edit config.env and set your SUPABASE_URL and SUPABASE_DB_PASSWORD
+# SUPABASE_URL=https://[YOUR-PROJECT-REF].supabase.co
+# SUPABASE_DB_PASSWORD=your_database_password
 
 # Run seed script
 python seed_data.py
 
 # Start backend server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 5173
 ```
 
 #### 3. Frontend
@@ -141,9 +161,10 @@ samarthya-ai/
 │   │   └── schemas/             # Pydantic request/response schemas
 │   └── seed_data.py             # Sample data seeder
 ├── database/
-│   └── init.sql                 # MySQL initialization
+│   ├── init.sql                 # Supabase PostgreSQL initialization
+│   └── supabase_schema.sql      # Supabase SQL Editor schema
 ├── docker-compose.yml
-├── .env.example
+├── config.env.example
 └── README.md
 ```
 
@@ -208,7 +229,7 @@ User Login (JWT)
 Replace `backend/app/integrations/igot_adapter.py` with real API calls. The adapter pattern ensures zero changes to the rest of the codebase.
 
 ### LLM / RAG Pipeline
-1. Add your LLM API key to `.env` (`LLM_API_KEY`)
+1. Add your LLM API key to `config.env` (`LLM_API_KEY`)
 2. Update `backend/app/ai/rag_service.py` with real embeddings and vector store
 3. Update `backend/app/ai/quiz_generator.py` with LLM-based generation
 4. The quiz generation API (`POST /api/quizzes/generate`) automatically uses the real generator when an API key is present
@@ -225,7 +246,9 @@ Query → Retrieve Relevant Chunks → LLM Prompt → MCQ Generation → Validat
 ## License
 
 Built for Smart India Hackathon 2026.
-=======
+
+---
+
 # SAMARTHYA AI
 
 ## AI-Powered Personalized Learning Platform for Officials
@@ -568,8 +591,8 @@ training analytics.
             └──────────────────┼──────────────────┘
                                ▼
                     ┌─────────────────────┐
-                    │       MySQL         │
-                    │      Database       │
+                    │      Supabase       │
+                    │    (PostgreSQL)     │
                     └──────────┬──────────┘
                                │
                                ▼
@@ -659,7 +682,7 @@ instead of relying only on general model knowledge.
   API Framework    FastAPI
   AI               RAG + LLM
   Algorithms       Skill-gap scoring + semantic course matching
-  Database         MySQL
+  Database         Supabase (PostgreSQL)
   Authentication   SSO + JWT
   Authorization    RBAC
   Deployment       Docker + Cloud
@@ -847,7 +870,7 @@ Install the following before running the project:
 
 -   Node.js
 -   Python
--   MySQL
+-   Supabase (or PostgreSQL)
 -   Git
 -   Docker *(optional for containerized deployment)*
 
@@ -856,12 +879,9 @@ Install the following before running the project:
 ## Clone the Repository
 
 ``` bash
-git clone https://github.com/YOUR-USERNAME/samarthya-ai.git
+git clone https://github.com/NITHISHKUMAR006/samarthya-ai.git
 cd samarthya-ai
 ```
-
-Replace `YOUR-USERNAME` with the GitHub account that hosts this
-repository.
 
 ------------------------------------------------------------------------
 
@@ -933,7 +953,7 @@ python -m uvicorn app.main:app --reload
 
 Do **not** commit secrets or API keys to GitHub.
 
-Create a local `.env` file based on the variables required by your
+Create a local `config.env` file based on the variables required by your
 implementation.
 
 Example:
@@ -949,6 +969,7 @@ Use placeholder values in documentation.
 ### Never upload:
 
 ``` text
+config.env
 .env
 API keys
 Passwords
@@ -1023,9 +1044,13 @@ concept/mock images.
 
 ## Live Prototype
 
-> Add your deployed prototype URL here.
+**Live Demo URL:** [https://samarthya.nithishkps.workers.dev/](https://samarthya.nithishkps.workers.dev/)
 
-**Live Demo:** `ADD-LIVE-PROTOTYPE-URL`
+> Deployed production prototype running on Cloudflare Workers edge network with Supabase PostgreSQL integration.
+
+### Quick Login for Evaluators:
+- **Official:** `rajesh.kumar@samarthya.demo` / `official123`
+- **Administrator:** `admin@samarthya.demo` / `admin123`
 
 ## Demo Video
 
@@ -1052,8 +1077,8 @@ This repository is intended to provide:
 The SIH presentation can direct evaluators to:
 
 ``` text
-Working Prototype → Live Demo / QR Code
-Source Code → GitHub Repository
+Working Prototype → https://samarthya.nithishkps.workers.dev/
+Source Code → https://github.com/NITHISHKUMAR006/samarthya-ai
 ```
 
 ------------------------------------------------------------------------
@@ -1151,4 +1176,5 @@ Copyright © 2026 Team SturzAlert
 **Assess → Personalize → Learn → Practice → Measure → Adapt**
 
 > **Turning Competency Gaps into Personalized Learning Paths.**
->>>>>>> e0c1709160a06571d9be6b77946b8e731f99d11a
+> 
+> **Live Demo:** [https://samarthya.nithishkps.workers.dev/](https://samarthya.nithishkps.workers.dev/)

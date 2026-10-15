@@ -1,7 +1,8 @@
 # Environment / secrets
-.env
-.env.*
-!.env.example
+config.env
+!config.env.example
+*.env
+!*.env.example
 
 # Frontend
 frontend/node_modules/
