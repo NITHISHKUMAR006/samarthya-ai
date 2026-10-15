@@ -61,9 +61,6 @@ cp config.env.example config.env
 
 # Start the application (Frontend + Backend):
 docker-compose up --build
-
-# In another terminal, seed the database (if needed)
-docker exec samarthya-backend python seed_data.py
 ```
 
 - **🌐 Live Demo:** [https://samarthya.nithishkps.workers.dev/](https://samarthya.nithishkps.workers.dev/)
