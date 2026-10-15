@@ -2,7 +2,7 @@
 
 **Smart India Hackathon 2026**
 
-SAMARTHYA AI is a competency-based learning platform for government officials in India's Official Statistical System (MoSPI). It identifies competency gaps, recommends personalized learning from the iGOT Karmayogi catalogue, and generates quizzes from uploaded learning materials using an AI-ready RAG + LLM architecture.
+SAMARTHYA AI is a competency-based learning platform for government officials in India's Official Statistical System (MoSPI). It identifies competency gaps, recommends personalized learning from the SAMARTHYA catalogue, and generates quizzes from uploaded learning materials using an AI-ready RAG + LLM architecture.
 
 ---
 
@@ -222,7 +222,7 @@ User Login (JWT)
 
 ## Future Integration
 
-### iGOT Karmayogi
+### SAMARTHYA Course Catalogue
 Replace `backend/app/integrations/igot_adapter.py` with real API calls. The adapter pattern ensures zero changes to the rest of the codebase.
 
 ### LLM / RAG Pipeline
@@ -256,7 +256,7 @@ SAMARTHYA AI is an **Adaptive Intelligence learning platform** designed
 to support competency-based capacity building for government officials.
 
 The platform identifies competency gaps based on an official's role and
-skills, recommends relevant learning paths and iGOT Karmayogi courses,
+skills, recommends relevant learning paths and SAMARTHYA courses,
 and enables officials to practice through AI-assisted MCQs and quizzes
 generated from uploaded learning materials.
 
@@ -435,9 +435,9 @@ performance improve.
 
 ## 4. iGOT Course Recommendation
 
-SAMARTHYA AI is designed to connect with a mock iGOT Karmayogi
+SAMARTHYA AI is designed to connect with a mock SAMARTHYA
 environment during prototyping and support future integration through an
-iGOT adapter / API-based architecture.
+adapter / API-based architecture.
 
 The recommendation workflow is:
 
@@ -1130,7 +1130,7 @@ Source Code → https://github.com/NITHISHKUMAR006/samarthya-ai
 The project documentation and concept are aligned with the project
 research around:
 
--   iGOT Karmayogi
+-   SAMARTHYA Capacity Building Platform
 -   MoSPI --- Ministry of Statistics and Programme Implementation
 -   NSSTA --- National Statistical Systems Training Academy
 -   Responsible AI principles
