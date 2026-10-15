@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: samarthya-backend
+    restart: unless-stopped
+    env_file:
+      - config.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - backend_uploads:/app/uploads
+
+volumes:
+  backend_uploads:
